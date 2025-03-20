@@ -14,7 +14,7 @@ struct WebService {
 
 class WebUI : public OpenKNX::Module
 {
-    bool firstLoop = false;
+    bool firstLoop = true;
     httpd_handle_t server = NULL;
     std::vector<WebService> services;
 
@@ -24,11 +24,10 @@ class WebUI : public OpenKNX::Module
 		const std::string name() override;
 		const std::string version() override;
 
+        void addHandler(httpd_uri_t handler);
         void addService(WebService service);
-
+        httpd_handle_t* getHandler();
         static esp_err_t base_handler(httpd_req_t *req);
-
-
 };
 
 

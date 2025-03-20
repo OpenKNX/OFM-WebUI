@@ -8,9 +8,9 @@ void  WebUI::setup(bool conf)
 
 void WebUI::loop(bool configured)
 {
-    if(!firstLoop)
+    if(firstLoop)
     {
-        firstLoop = true;
+        firstLoop = false;
         httpd_config_t config = HTTPD_DEFAULT_CONFIG();
 
         if (httpd_start(&server, &config) == ESP_OK) {
@@ -60,9 +60,19 @@ const std::string  WebUI::version()
     return "";
 }
 
+void WebUI::addHandler(httpd_uri_t handler)
+{
+    httpd_register_uri_handler(server, &handler);
+}
+
 void WebUI::addService(WebService service)
 {
     services.push_back(service);
+}
+
+httpd_handle_t* WebUI::getHandler()
+{
+    return &server;
 }
 
 esp_err_t WebUI::base_handler(httpd_req_t *req)
@@ -80,6 +90,7 @@ esp_err_t WebUI::base_handler(httpd_req_t *req)
     else
     {
         httpd_resp_send_404(req);
+        return ESP_OK;
     }
 }
 
