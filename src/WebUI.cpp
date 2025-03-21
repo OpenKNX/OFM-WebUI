@@ -76,20 +76,17 @@ httpd_handle_t* WebUI::getHandler()
     return &server;
 }
 
+const char * WebUI::getBaseUri()
+{
+    return WEBUI_BASE_URI;
+}
+
 esp_err_t WebUI::base_handler(httpd_req_t *req)
 {
     printf("WEB URI: %s\n", req->uri);
     WebUI *ui = (WebUI *)req->user_ctx;
 
-    if(strcmp(req->uri, "/") == 0)
-    {
-        httpd_resp_set_type(req, "text/html");
-        httpd_resp_set_status(req, "301 Moved Permanently");
-        httpd_resp_set_hdr(req, "Location", WEBUI_BASE_URI);
-        httpd_resp_send(req, NULL, 0);
-        return ESP_OK;
-    }
-    else if(strcmp(req->uri, WEBUI_BASE_URI) == 0)
+    if(strcmp(req->uri, WEBUI_BASE_URI) == 0)
     {
         std::string response = "<html><head><title>OpenKNX WebUI</title></head><body><h1>OpenKNX</h1><li>";
         
@@ -107,6 +104,14 @@ esp_err_t WebUI::base_handler(httpd_req_t *req)
         response += "</li></body></html>";
         
         httpd_resp_send(req, response.c_str(), HTTPD_RESP_USE_STRLEN);
+        return ESP_OK;
+    }
+    else if(strcmp(req->uri, "/") == 0)
+    {
+        httpd_resp_set_type(req, "text/html");
+        httpd_resp_set_status(req, "301 Moved Permanently");
+        httpd_resp_set_hdr(req, "Location", WEBUI_BASE_URI);
+        httpd_resp_send(req, NULL, 0);
         return ESP_OK;
     }
     else
