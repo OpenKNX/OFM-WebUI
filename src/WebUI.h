@@ -8,8 +8,9 @@
 #endif
 
 struct WebService {
-    httpd_uri uri;
-    String name;
+    httpd_uri_t uri;
+    std::string name;
+    bool isVisible = true;
 };
 
 class WebUI : public OpenKNX::Module
@@ -24,7 +25,7 @@ class WebUI : public OpenKNX::Module
 		const std::string name() override;
 		const std::string version() override;
 
-        void addHandler(httpd_uri_t handler);
+        // void addHandler(httpd_uri_t handler);
         void addService(WebService service);
         httpd_handle_t* getHandler();
         static esp_err_t base_handler(httpd_req_t *req);
