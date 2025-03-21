@@ -26,7 +26,6 @@ class WebUI : public OpenKNX::Module
 		const std::string version() override;
         const char * getBaseUri();
 
-        // void addHandler(httpd_uri_t handler);
         void addService(WebService service);
         httpd_handle_t* getHandler();
         static esp_err_t base_handler(httpd_req_t *req);

@@ -57,14 +57,8 @@ const std::string  WebUI::name()
 
 const std::string  WebUI::version()
 {
-    return "";
+    return MODULE_WebUI_Version;
 }
-
-// void WebUI::addHandler(httpd_uri_t handler)
-// {
-//     logDebugP("Add handler for %s", handler.uri);
-//     httpd_register_uri_handler(server, &handler);
-// }
 
 void WebUI::addService(WebService service)
 {
@@ -88,8 +82,9 @@ esp_err_t WebUI::base_handler(httpd_req_t *req)
 
     if(strcmp(req->uri, WEBUI_BASE_URI) == 0)
     {
-        std::string response = "<html><head><title>OpenKNX WebUI</title></head><body><h1>OpenKNX</h1><li>";
+        std::string response = "<html><head><title>OpenKNX WebUI</title></head><body><h1>OpenKNX</h1>";
         
+        response += "<h3>Web-Services:</h3><ul>";
         for(auto &service : ui->services)
         {
             if(service.isVisible == false)
@@ -101,7 +96,18 @@ esp_err_t WebUI::base_handler(httpd_req_t *req)
             response += "</a><br>";
         }
         
-        response += "</li></body></html>";
+        response += "</ul><h3>Verwendete Module:</h3><ul>";
+        for(auto &module : openknx.modules.list)
+        {
+            if(module == nullptr)
+                continue;
+            response += "<li>";
+            response += module->name();
+            response += " - ";
+            response += module->version();
+            response += "</li>";
+        }
+        response += "</body></html>";
         
         httpd_resp_send(req, response.c_str(), HTTPD_RESP_USE_STRLEN);
         return ESP_OK;
