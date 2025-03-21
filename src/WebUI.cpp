@@ -40,7 +40,7 @@ void WebUI::loop(bool configured)
 
             for(auto &service : services)
             {
-                logDebugP("URI handler for %s", service.name.c_str());
+                logDebugP("URI handler for %s at %s", service.name.c_str(), service.uri.uri);
                 httpd_register_uri_handler(server, &service.uri);
             }
             logIndentDown();
@@ -62,6 +62,7 @@ const std::string  WebUI::version()
 
 void WebUI::addHandler(httpd_uri_t handler)
 {
+    logDebugP("Add handler for %s", handler.uri);
     httpd_register_uri_handler(server, &handler);
 }
 
@@ -77,6 +78,7 @@ httpd_handle_t* WebUI::getHandler()
 
 esp_err_t WebUI::base_handler(httpd_req_t *req)
 {
+    printf("WEB URI: %s\n", req->uri);
     WebUI *ui = (WebUI *)req->user_ctx;
 
     if(strcmp(req->uri, "/") == 0)
@@ -85,6 +87,11 @@ esp_err_t WebUI::base_handler(httpd_req_t *req)
         httpd_resp_set_status(req, "301 Moved Permanently");
         httpd_resp_set_hdr(req, "Location", WEBUI_BASE_URI);
         httpd_resp_send(req, NULL, 0);
+        return ESP_OK;
+    }
+    else if(strcmp(req->uri, WEBUI_BASE_URI) == 0)
+    {
+        httpd_resp_send(req, "Alles ist ok", HTTPD_RESP_USE_STRLEN);
         return ESP_OK;
     }
     else
