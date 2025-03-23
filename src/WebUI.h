@@ -27,9 +27,8 @@ class WebUI : public OpenKNX::Module
         const char * getBaseUri();
 
         void addService(WebService service);
-        httpd_handle_t* getHandler();
+        httpd_handle_t getHandler();
         static esp_err_t base_handler(httpd_req_t *req);
 };
-
 
 extern WebUI openknxWebUI;

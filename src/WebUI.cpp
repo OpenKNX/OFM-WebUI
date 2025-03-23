@@ -65,9 +65,9 @@ void WebUI::addService(WebService service)
     services.push_back(service);
 }
 
-httpd_handle_t* WebUI::getHandler()
+httpd_handle_t WebUI::getHandler()
 {
-    return &server;
+    return server;
 }
 
 const char * WebUI::getBaseUri()
@@ -77,7 +77,6 @@ const char * WebUI::getBaseUri()
 
 esp_err_t WebUI::base_handler(httpd_req_t *req)
 {
-    printf("WEB URI: %s\n", req->uri);
     WebUI *ui = (WebUI *)req->user_ctx;
 
     if(strcmp(req->uri, WEBUI_BASE_URI) == 0)
