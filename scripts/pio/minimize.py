@@ -36,7 +36,7 @@ def process_files(input_dir):
     if not os.path.exists(input_dir + "/www"):
         return
 
-    print("    " + input_dir)
+    print(("    {}" + input_dir + "{}").format(console_color.CYAN, console_color.END))
 
     file_dict = {}
     for root, _, files in os.walk(input_dir + "/www"):
