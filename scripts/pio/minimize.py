@@ -57,6 +57,10 @@ def process_files(input_dir):
             with open(file_path, 'rb') as f_in:
                 compressed_data = gzip.compress(f_in.read())
 
+            compressed_data = bytearray(compressed_data)
+            compressed_data[4] = 0
+            compressed_data[5] = 0
+
             size_new = len(compressed_data)
             print(f"    {os.path.basename(file_path)}: {round(size_new / size_old * 100, 2)}%    {size_old} B -> {size_new} B")
             variable_name = os.path.basename(file_path).replace(".", "_")
