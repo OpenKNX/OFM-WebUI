@@ -36,7 +36,7 @@ def process_files(input_dir):
     if not os.path.exists(input_dir + "/www"):
         return
 
-    print(("    {}" + input_dir + "{}").format(console_color.CYAN, console_color.END))
+    print(("  {}" + input_dir + "{}").format(console_color.CYAN, console_color.END))
 
     file_dict = {}
     for root, _, files in os.walk(input_dir + "/www"):
@@ -58,7 +58,7 @@ def process_files(input_dir):
                 compressed_data = gzip.compress(f_in.read())
 
             size_new = len(compressed_data)
-            print(f"       {os.path.basename(file_path)}: {round(size_new / size_old * 100, 2)}%    {size_old} B -> {size_new} B")
+            print(f"    {os.path.basename(file_path)}: {round(size_new / size_old * 100, 2)}%    {size_old} B -> {size_new} B")
             variable_name = os.path.basename(file_path).replace(".", "_")
             output_file = input_dir + "/include/file_" + variable_name + ".h"
 

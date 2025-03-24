@@ -8,7 +8,8 @@
 #endif
 
 struct WebService {
-    httpd_uri_t uri;
+    httpd_uri_t httpd;
+    std::string uri;
     std::string name;
     bool isVisible = true;
 };

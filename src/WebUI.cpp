@@ -41,8 +41,8 @@ void WebUI::loop(bool configured)
 
             for(auto &service : services)
             {
-                logDebugP("URI handler for %s at %s", service.name.c_str(), service.uri.uri);
-                httpd_register_uri_handler(server, &service.uri);
+                logDebugP("URI handler for %s at %s", service.name.c_str(), service.uri);
+                httpd_register_uri_handler(server, &service.httpd);
             }
             logIndentDown();
         } else {
@@ -90,7 +90,7 @@ esp_err_t WebUI::base_handler(httpd_req_t *req)
             if(service.isVisible == false)
                 continue;
             response += "<a href=\"";
-            response += service.uri.uri;
+            response += service.uri;
             response += "\">";
             response += service.name;
             response += "</a><br>";
