@@ -62,7 +62,7 @@ def process_files(input_dir):
             compressed_data[5] = 0
 
             size_new = len(compressed_data)
-            print(f"    {os.path.basename(file_path)}: {round(size_new / size_old * 100, 2)}%    {size_old} B -> {size_new} B")
+            print(f"    {os.path.basename(file_path):<30}: {round(size_new / size_old * 100, 2)}%   {size_old:>6} B -> {size_new:>6} B")
             variable_name = os.path.basename(file_path).replace(".", "_")
             output_file = input_dir + "/include/file_" + variable_name + ".h"
 
