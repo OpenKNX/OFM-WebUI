@@ -12,6 +12,7 @@ void WebUI::loop(bool configured)
     {
         firstLoop = false;
         httpd_config_t config = HTTPD_DEFAULT_CONFIG();
+        config.uri_match_fn = httpd_uri_match_wildcard;
 
         if (httpd_start(&server, &config) == ESP_OK) {
             // Registering the ws handler
@@ -81,7 +82,7 @@ esp_err_t WebUI::base_handler(httpd_req_t *req)
 
     if(strcmp(req->uri, WEBUI_BASE_URI) == 0)
     {
-        std::string response = "<html><head><title>OpenKNX WebUI</title></head><body><h1>OpenKNX</h1>";
+        std::string response = index_html;
         
         response += "<h3>Web-Services:</h3><ul>";
         for(auto &service : ui->services)
@@ -106,7 +107,7 @@ esp_err_t WebUI::base_handler(httpd_req_t *req)
             response += module->version();
             response += "</li>";
         }
-        response += "</body></html>";
+        response += "</ul></body></html>";
         
         httpd_resp_send(req, response.c_str(), HTTPD_RESP_USE_STRLEN);
         return ESP_OK;
