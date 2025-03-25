@@ -58,8 +58,11 @@ def process_files(input_dir):
                 compressed_data = gzip.compress(f_in.read())
 
             compressed_data = bytearray(compressed_data)
+            # remove the timestamp
             compressed_data[4] = 0
             compressed_data[5] = 0
+            compressed_data[6] = 0
+            compressed_data[7] = 0
 
             size_new = len(compressed_data)
             print(f"    {os.path.basename(file_path):<30}: {round(size_new / size_old * 100, 2)}%   {size_old:>6} B -> {size_new:>6} B")
