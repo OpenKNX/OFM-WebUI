@@ -72,6 +72,11 @@ void WebUI::addHandler(WebHandler h)
     handler.push_back(h);
 }
 
+void WebUI::addPage(WebPage p)
+{
+    pages.push_back(p);
+}
+
 httpd_handle_t WebUI::getHandler()
 {
     return server;

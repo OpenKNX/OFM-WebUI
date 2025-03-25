@@ -54,7 +54,22 @@ def process_files(input_dir):
                     continue
             
             size_old = os.path.getsize(file_path)
-            with open(file_path, 'rb') as f_in:
+
+            with open(file_path, 'r') as f:
+                content = f.read()
+
+            if "#webui#" in content:
+                print("has replace")
+                # CHANGE ALSO IN HEADER
+                content = content.replace("#webui#base#", "/openknx")
+                with open(file_path + ".temp", 'w') as f:
+                    f.write(content)
+                file_path_temp = file_path + ".temp"
+            else:
+                print("no replace")
+                file_path_temp = file_path
+
+            with open(file_path_temp, 'rb') as f_in:
                 compressed_data = gzip.compress(f_in.read())
 
             compressed_data = bytearray(compressed_data)
@@ -68,6 +83,9 @@ def process_files(input_dir):
             print(f"    {os.path.basename(file_path):<30}: {round(size_new / size_old * 100, 2)}%   {size_old:>6} B -> {size_new:>6} B")
             variable_name = os.path.basename(file_path).replace(".", "_")
             output_file = input_dir + "/include/file_" + variable_name + ".h"
+
+            if file_path_temp != file_path:
+                os.remove(file_path_temp)
 
             # Headerdatei schreiben
             with open(output_file, 'w') as f_out:
