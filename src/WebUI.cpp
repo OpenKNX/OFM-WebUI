@@ -1,5 +1,6 @@
 #include "WebUI.h"
 
+#include "versions.h"
 
 void  WebUI::setup(bool conf)
 {
@@ -97,6 +98,18 @@ esp_err_t WebUI::base_handler(httpd_req_t *req)
         }
         
         response += "</ul><h3>Verwendete Module:</h3><ul>";
+
+        #ifdef KNX_Version
+        response += "<li>KNX - ";
+        response += KNX_Version;
+        response += "</li>";
+        #endif
+        #ifdef MODULE_Common_Version
+        response += "<li>Common - ";
+        response += MODULE_Common_Version;
+        response += "</li>";
+        #endif
+
         for(auto &module : openknx.modules.list)
         {
             if(module == nullptr)
